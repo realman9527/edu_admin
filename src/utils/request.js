@@ -2,6 +2,7 @@ import axios from 'axios'
 import { Message, MessageBox } from 'element-ui'
 import store from '../store'
 import { getToken } from '@/utils/auth'
+import qs from 'querystring'
 
 // 创建axios实例
 const service = axios.create({
@@ -69,5 +70,15 @@ service.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+service.JSON_POST = (url, params) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  }
+  const jsonData = qs.parse(qs.stringify(params))
+  return service.post(url, jsonData, config)
+}
 
 export default service

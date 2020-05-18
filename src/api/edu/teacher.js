@@ -11,10 +11,13 @@ export default{
     deleteTeacherId(params){
         return request.JSON_POST('/eduservice/teacher/removeTeacherById',params)
     },
-    addTeacher(params){
+    addOrUpdateTeacher(params){
+        return request.JSON_POST('/eduservice/teacher/addOrUpdateTeacher',params)
+    },
+    getTeacherInfo(params){
         return request({
-            url: '/eduservice/teacher/addTeacher',
-            method: 'post',
+            url: '/eduservice/teacher/getTeacherById',
+            method: 'get',
             params
         })
     }

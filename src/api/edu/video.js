@@ -2,12 +2,17 @@ import request from '@/utils/request'
 export default {
 
     //添加小节
-    addVideo(video) {
+    addVideo(params) {
         return request.JSON_POST('/eduservice/video/addVideo',params)
     },
     
     //删除小节
-    deleteVideo(id) {
+    deleteVideo(params) {
         return request.JSON_POST('/eduservice/video/deleteVideo',params)
     },
+
+    //删除视频
+    deleteAliyunvod(id) {
+        return request.JSON_POST('/eduservice/video/removeAlyVideo',params)
+    }
 }

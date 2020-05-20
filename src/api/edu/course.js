@@ -37,10 +37,11 @@ export default {
     },
     //TODO 课程列表
     //课程最终发布
-    getListCourse() {
+    getListCourse(params) {
         return request({
-            url: '/eduservice/course',
-            method: 'get'
+            url: '/eduservice/course/getCourseList',
+            method: 'get',
+            params
         })
     }
 }

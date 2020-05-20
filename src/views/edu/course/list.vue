@@ -47,17 +47,17 @@
 
       <el-table-column prop="gmtCreate" label="添加时间" width="160"/>
 
-      <el-table-column prop="viewCount" label="浏览数量" width="160" />
+      <el-table-column prop="viewCount" label="浏览数量" width="100" />
 
       <el-table-column label="操作"  align="center">
         <template slot-scope="scope">
           <router-link :to="'/teacher/edit/'+scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit">编辑课程基本信息</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-edit">编辑信息</el-button>
           </router-link>
           <router-link :to="'/teacher/edit/'+scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit">编辑课程大纲息</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-edit">编辑大纲</el-button>
           </router-link>
-          <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除课程信息</el-button>
+          <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -97,13 +97,20 @@ export default {
     },
     methods:{  //创建具体的方法，调用teacher.js定义的方法
         //讲师列表的方法
-        getList() {
-            let params = this.courseQuery
+        getList(page=1) {
+          this.page = page
+            let params = {
+                current: this.page,
+                limit: this.limit,
+                name: this.courseQuery.title,
+                level: this.courseQuery.status
+            }
             course.getListCourse(params)
                 .then(response =>{//请求成功
                     //response接口返回的数据
                     console.log("====",response)
-                    this.list = response.obj
+                    this.list = response.obj.records
+                    this.total = response.obj.total
                 }) 
         },
         resetData() {//清空的方法

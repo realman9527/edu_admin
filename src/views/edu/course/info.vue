@@ -76,9 +76,9 @@
                 :show-file-list="false"
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload"
-                :action="BASE_API+'/eduoss/fileoss'"
+                :action="BASE_API+'/eduoss/file/uploadOssCourseImg'"
                 class="avatar-uploader">
-                <img :src="courseInfo.cover">
+                <img :src="courseInfo.coverUrl">
             </el-upload>
 
         </el-form-item>
@@ -111,7 +111,8 @@ export default {
                 teacherId: '',
                 lessonNum: 0,
                 description: '',
-                cover: '/static/01.jpg',
+                cover: '',
+                coverUrl:'/static/01.jpg',
                 price: 0
             },
             courseId:'',
@@ -143,12 +144,12 @@ export default {
             course.getCourseInfoId(this.courseId)
                 .then(response => {
                     //在courseInfo课程基本信息，包含 一级分类id 和 二级分类id
-                    this.courseInfo = response.data.courseInfoVo
+                    this.courseInfo = response.obj.courseInfoVo
                     //1 查询所有的分类，包含一级和二级
                     subject.getSubjectList()
                         .then(response => {
                             //2 获取所有一级分类
-                            this.subjectOneList = response.data.list
+                            this.subjectOneList = response.obj.list
                             //3 把所有的一级分类数组进行遍历，
                             for(var i=0;i<this.subjectOneList.length;i++) {
                                 //获取每个一级分类
@@ -166,7 +167,9 @@ export default {
         },
         //上传封面成功调用的方法
         handleAvatarSuccess(res, file) {
-            this.courseInfo.cover = res.data.url
+            console.log("image",res)
+            this.courseInfo.coverUrl = res.obj.splicingUrl
+            this.courseInfo.cover = res.obj.url
         },
         //上传之前调用的方法
         beforeAvatarUpload(file) {
@@ -201,14 +204,16 @@ export default {
         getOneSubject() {
             subject.getSubjectList()
                 .then(response => {
-                    this.subjectOneList = response.data.list
+                    console.log("one",response)
+                    this.subjectOneList = response.obj
                 })
         },
         //查询所有的讲师
         getListTeacher() {
             course.getListTeacher()
                 .then(response => {
-                    this.teacherList = response.data.items
+                    console.log("teach",response)
+                    this.teacherList = response.obj
                 })
         },
         //添加课程
@@ -221,12 +226,15 @@ export default {
                         message: '添加课程信息成功!'
                     });
                     //跳转到第二步
-                    this.$router.push({path:'/course/chapter/'+response.data.courseId})
+                    console.log("add",response)
+                    this.$router.push({path:'/course/chapter/'+response.obj})
                 })
         },
         //修改课程
         updateCourse() {
-            course.updateCourseInfo(this.courseInfo)
+            let params = this.courseInfo
+            this.$set(params,'courseId',this.courseInfo)
+            course.updateCourseInfo(params)
                 .then(response => {
                      //提示
                     this.$message({

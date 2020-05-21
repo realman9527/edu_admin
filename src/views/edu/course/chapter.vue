@@ -61,7 +61,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="dialogChapterFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+            <el-button type="primary" :disabled="saveBtnChapterDisabled" @click="saveOrUpdate">确 定</el-button>
         </div>
     </el-dialog>
 
@@ -120,6 +120,7 @@ export default {
     data() {
         return {
             saveBtnDisabled:false,
+            saveBtnChapterDisabled:false,
             courseId:'',//课程id
             chapterVideoList:[],
             chapter:{ //封装章节数据
@@ -192,7 +193,11 @@ export default {
                 type: 'warning'
             }).then(() => {  //点击确定，执行then方法
                 //调用删除的方法
-                video.deleteVideo(id)
+                let params = {
+                    "id":id
+                }
+                console.log("=====",params)
+                video.deleteVideo(params)
                     .then(response =>{//删除成功
                     //提示信息
                     this.$message({
@@ -278,6 +283,7 @@ export default {
         openChapterDialog() {
             //弹框
             this.dialogChapterFormVisible = true
+            this.saveBtnChapterDisabled = false
             //表单数据清空
             this.chapter.title = ''
             this.chapter.sort = 0
@@ -286,6 +292,7 @@ export default {
         addChapter() {
             //设置课程id到chapter对象里面
             this.chapter.courseId = this.courseId
+            this.saveBtnChapterDisabled = true
             chapter.addChapter(this.chapter)
                 .then(response => {
                     //关闭弹框
@@ -295,6 +302,7 @@ export default {
                         type: 'success',
                         message: '添加章节成功!'
                     });
+                    this.saveBtnChapterDisabled = false
                     //刷新页面
                     this.getChapterVideo()
                 })

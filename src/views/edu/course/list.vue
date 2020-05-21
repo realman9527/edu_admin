@@ -51,10 +51,10 @@
 
       <el-table-column label="操作"  align="center">
         <template slot-scope="scope">
-          <router-link :to="'/teacher/edit/'+scope.row.id">
+          <router-link :to="'/course/info/'+scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit">编辑信息</el-button>
           </router-link>
-          <router-link :to="'/teacher/edit/'+scope.row.id">
+          <router-link :to="'/course/chapter/'+scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit">编辑大纲</el-button>
           </router-link>
           <el-button type="danger" size="mini" icon="el-icon-delete" @click="removeDataById(scope.row.id)">删除</el-button>
@@ -118,7 +118,8 @@ export default {
             this.courseQuery = {}
             //查询所有讲师数据
             this.getList()
-        }
+        },
+        
  
     }
 }
